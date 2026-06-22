@@ -1,0 +1,45 @@
+{
+  "run_id": "ttec-v0.1-smoke",
+  "generated_at": "2026-06-22T00:00:00Z",
+  "summary": {
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "case_results": [
+    {
+      "case_id": "TTEC-SMOKE-001",
+      "suite": "canonical-smoke",
+      "trace_id": "ttec-smoke-langgraph-001",
+      "status": "passed",
+      "check_results": [
+        {
+          "type": "text_present",
+          "status": "passed",
+          "message": "output contains required text"
+        },
+        {
+          "type": "text_absent",
+          "status": "passed",
+          "message": "output omits forbidden text"
+        },
+        {
+          "type": "citation_span_present",
+          "status": "passed",
+          "message": "citation span is present"
+        },
+        {
+          "type": "tool_call_allowed",
+          "status": "passed",
+          "message": "tool call is allowed"
+        },
+        {
+          "type": "refusal_required",
+          "status": "passed",
+          "message": "refusal was not required"
+        }
+      ]
+    }
+  ]
+}
+

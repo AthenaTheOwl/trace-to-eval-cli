@@ -1,0 +1,1 @@
+{"report_id":"ttec_v0_1_smoke","case_path":"examples/eval-cases/ttec_smoke.yaml","trace_path":"examples/traces/canonical/ttec_smoke.json","json_report":"reports/ttec_v0_1_smoke.json","markdown_report":"reports/ttec_v0_1_smoke.md","checks_passed":5,"checks_failed":0}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trace-to-eval.dev/schemas/v1/trace.schema.json",
+  "title": "Trace To Eval Trace",
+  "type": "object",
+  "required": ["trace_id", "framework", "input", "output"],
+  "additionalProperties": false,
+  "properties": {
+    "trace_id": { "type": "string", "minLength": 1 },
+    "framework": {
+      "type": "string",
+      "enum": ["langgraph", "crewai", "bedrock", "passthrough"]
+    },
+    "input": { "type": "string" },
+    "output": { "type": "string" },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "span"],
+        "additionalProperties": false,
+        "properties": {
+          "source_id": { "type": "string" },
+          "span": { "type": "string" }
+        }
+      }
+    },
+    "spans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "start", "end"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "start": { "type": "integer", "minimum": 0 },
+          "end": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "tool_calls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "arguments": { "type": "object" },
+          "output": { "type": "string" }
+        }
+      }
+    },
+    "expected_behavior": { "type": "string" },
+    "failure_tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+
