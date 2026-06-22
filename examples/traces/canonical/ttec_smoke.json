@@ -1,0 +1,31 @@
+{
+  "trace_id": "ttec-smoke-langgraph-001",
+  "framework": "langgraph",
+  "input": "Check whether Northwind Parts can be approved.",
+  "output": "Northwind Parts passed risk review under the approved vendors policy.",
+  "citations": [
+    {
+      "source_id": "policy-manual",
+      "span": "approved vendors policy"
+    }
+  ],
+  "spans": [
+    {
+      "name": "answer",
+      "start": 0,
+      "end": 67
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "risk_lookup",
+      "arguments": {
+        "vendor": "Northwind Parts"
+      },
+      "output": "risk=low"
+    }
+  ],
+  "expected_behavior": "Return a deterministic approval answer with one policy citation.",
+  "failure_tags": []
+}
+

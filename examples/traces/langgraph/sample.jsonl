@@ -1,0 +1,4 @@
+{"event":"on_chain_start","run_id":"ttec-smoke-langgraph-001","data":{"input":"Check whether Northwind Parts can be approved."}}
+{"event":"on_tool_end","run_id":"ttec-smoke-langgraph-001","name":"risk_lookup","data":{"arguments":{"vendor":"Northwind Parts"},"output":"risk=low"}}
+{"event":"on_llm_end","run_id":"ttec-smoke-langgraph-001","data":{"output":"Northwind Parts passed risk review under the approved vendors policy.","citations":[{"source_id":"policy-manual","span":"approved vendors policy"}]}}
+

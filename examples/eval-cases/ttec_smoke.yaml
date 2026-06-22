@@ -1,0 +1,33 @@
+{
+  "cases": [
+    {
+      "id": "TTEC-SMOKE-001",
+      "suite": "canonical-smoke",
+      "trace_id": "ttec-smoke-langgraph-001",
+      "trace_file": "ttec_smoke.json",
+      "checks": [
+        {
+          "type": "text_present",
+          "value": "Northwind Parts passed risk review"
+        },
+        {
+          "type": "text_absent",
+          "value": "blocked vendor"
+        },
+        {
+          "type": "citation_span_present",
+          "value": "approved vendors"
+        },
+        {
+          "type": "tool_call_allowed",
+          "value": "risk_lookup"
+        },
+        {
+          "type": "refusal_required",
+          "value": false
+        }
+      ]
+    }
+  ]
+}
+
