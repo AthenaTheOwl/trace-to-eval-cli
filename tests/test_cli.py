@@ -20,6 +20,40 @@ def test_validate_no_args_succeeds() -> None:
     assert "TTEC_OK" in result.stdout
 
 
+def test_show_prints_ranked_readable_view() -> None:
+    result = subprocess.run(
+        [sys.executable, "-m", "trace_to_eval_cli", "show"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    out = result.stdout
+    # headline finding is present and the demo report's run id is shown
+    assert "finding:" in out
+    assert "ttec-v0.1-demo" in out
+    # failing case is ranked first (before the passing cases)
+    idx_fail = out.index("TTEC-DEMO-003")
+    idx_pass = out.index("TTEC-DEMO-001")
+    assert idx_fail < idx_pass, "failing case should rank above passing cases"
+
+
+def test_summarize_report_ranks_failing_first() -> None:
+    import json
+
+    from trace_to_eval_cli.runner import summarize_report
+
+    report = json.loads(
+        (ROOT / "reports" / "ttec_v0_1_demo.json").read_text(encoding="utf-8")
+    )
+    view = summarize_report(report)
+    assert view["summary"]["total"] == 3
+    assert view["summary"]["failed"] == 1
+    assert view["cases"][0]["status"] == "failed"
+    assert view["cases"][0]["case_id"] == "TTEC-DEMO-003"
+
+
 def test_regress_fails_when_prior_pass_fails_now() -> None:
     baseline = ROOT / "reports" / "ttec_v0_1_smoke.json"
     scratch = ROOT / "reports" / "local"

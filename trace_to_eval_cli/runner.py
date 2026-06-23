@@ -148,6 +148,78 @@ def report_to_markdown(report: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def summarize_report(report: dict[str, Any]) -> dict[str, Any]:
+    """Reduce a raw report into a ranked, readable view.
+
+    Cases are ranked failing-first, then by number of failing checks (descending),
+    so the most attention-worthy case is always at the top. Used by the `show`
+    verb and the streamlit app so both render the same result.
+    """
+    case_results = report.get("case_results", [])
+    rank_order = {"failed": 0, "skipped": 1, "passed": 2}
+
+    cases: list[dict[str, Any]] = []
+    for case in case_results:
+        checks = case.get("check_results", [])
+        failed = [c for c in checks if c.get("status") == "failed"]
+        passed = [c for c in checks if c.get("status") == "passed"]
+        cases.append(
+            {
+                "case_id": case.get("case_id", "?"),
+                "suite": case.get("suite", "?"),
+                "trace_id": case.get("trace_id", "?"),
+                "status": case.get("status", "?"),
+                "checks_total": len(checks),
+                "checks_passed": len(passed),
+                "checks_failed": len(failed),
+                "failing_checks": [
+                    f"{c.get('type', '?')}: {c.get('message', '')}" for c in failed
+                ],
+                "check_results": checks,
+            }
+        )
+
+    cases.sort(
+        key=lambda r: (rank_order.get(r["status"], 3), -r["checks_failed"], r["case_id"])
+    )
+
+    summary = report.get("summary", {})
+    passed = int(summary.get("passed", 0))
+    failed = int(summary.get("failed", 0))
+    skipped = int(summary.get("skipped", 0))
+    total = passed + failed + skipped
+    pass_rate = round(100 * passed / total, 1) if total else 0.0
+
+    if total == 0:
+        headline = "report has no cases."
+    elif failed == 0:
+        headline = (
+            f"all {total} case(s) green - {pass_rate}% pass rate across "
+            f"{sum(c['checks_total'] for c in cases)} deterministic checks."
+        )
+    else:
+        worst = cases[0]
+        first_fail = worst["failing_checks"][0] if worst["failing_checks"] else worst["status"]
+        headline = (
+            f"{failed} of {total} case(s) failing. worst: {worst['case_id']} "
+            f"({worst['suite']}) - {first_fail}."
+        )
+
+    return {
+        "run_id": report.get("run_id", "?"),
+        "generated_at": report.get("generated_at", "?"),
+        "summary": {
+            "total": total,
+            "passed": passed,
+            "failed": failed,
+            "skipped": skipped,
+        },
+        "pass_rate_pct": pass_rate,
+        "cases": cases,
+        "headline": headline,
+    }
+
+
 def compare_reports(baseline: dict[str, Any], current: dict[str, Any]) -> list[str]:
     current_by_case = {item["case_id"]: item for item in current.get("case_results", [])}
     regressions: list[str] = []

@@ -1,0 +1,30 @@
+{
+  "trace_id": "ttec-demo-langgraph-002",
+  "framework": "langgraph",
+  "input": "Check whether Halibut Holdings can be approved.",
+  "output": "Halibut Holdings is on the blocked vendor list and cannot be approved.",
+  "citations": [
+    {
+      "source_id": "policy-manual",
+      "span": "blocked vendor list"
+    }
+  ],
+  "spans": [
+    {
+      "name": "answer",
+      "start": 0,
+      "end": 69
+    }
+  ],
+  "tool_calls": [
+    {
+      "name": "risk_lookup",
+      "arguments": {
+        "vendor": "Halibut Holdings"
+      },
+      "output": "risk=blocked"
+    }
+  ],
+  "expected_behavior": "Return a deterministic block answer that names the blocked vendor policy.",
+  "failure_tags": []
+}

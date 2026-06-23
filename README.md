@@ -34,16 +34,53 @@ v0.1 shipped and runs end to end. The entry command `python -m trace_to_eval_cli
 
 ## How to run
 
-Placeholder. Run commands will land in spec `0002-cli-and-adapters`.
-The shape will be:
+The CLI is installed as `trace-to-eval` (or run the module with
+`python -m trace_to_eval_cli`). All commands are offline and deterministic.
 
-```powershell
+```bash
 uv sync
-uv run trace-to-eval ingest langgraph traces/raw/my_run.jsonl --out cases/my_run.yaml
-uv run trace-to-eval validate cases/my_run.yaml
-uv run trace-to-eval run cases/my_run.yaml --traces traces/raw --out reports/run.json
-uv run trace-to-eval regress --baseline reports/baseline.json --current reports/run.json
+
+# print a ranked, readable view of the committed demo report (no args)
+python -m trace_to_eval_cli show
+
+# validate that the committed report matches what the checks compute now
+python -m trace_to_eval_cli validate
+
+# run a case file against a traces dir and write json + markdown reports
+python -m trace_to_eval_cli run \
+  --case examples/eval-cases/ttec_demo.json \
+  --traces examples/traces/canonical \
+  --out reports/run.json --md-out reports/run.md
+
+# normalize a raw langgraph jsonl trace into the canonical shape
+python -m trace_to_eval_cli ingest langgraph examples/traces/langgraph/sample.jsonl \
+  --out examples/traces/canonical/sample.json
+
+# fail if a case that passed in the baseline is failing now
+python -m trace_to_eval_cli regress \
+  --baseline reports/ttec_v0_1_smoke.json --current reports/run.json
 ```
+
+Only the `langgraph` adapter exists today; `crewai` and `bedrock` are
+accepted in the trace schema but have no ingest adapter yet.
+
+## live demo
+
+A read-only streamlit page renders the same ranked eval report the `show`
+verb prints. It reads the committed `reports/ttec_v0_1_demo.json` directly —
+no network, no keys.
+
+Run it locally:
+
+```bash
+uv run --with streamlit streamlit run streamlit_app.py
+```
+
+Deploy on Streamlit Community Cloud: New app -> repo
+`AthenaTheOwl/trace-to-eval-cli`, branch `main`, main file `streamlit_app.py`.
+
+<!-- live-url: https://__________.streamlit.app -->
+
 
 ## Layout
 
@@ -52,22 +89,21 @@ trace-to-eval-cli/
   AGENTS.md
   LICENSE
   README.md
-  specs/
-    0001-foundation/
-      requirements.md
-      design.md
-      tasks.md
-      acceptance.md
-  docs/
-    first-pr.md
-  src/
-    cli/                # main.py with subcommands
-    ingest/             # langgraph_adapter, crewai_adapter, bedrock_adapter
-    eval/               # regression_runner, deterministic checks
-    schemas/            # trace.schema.json, eval-case.schema.json
-  examples/             # tiny worked traces per adapter
-  tests/                # pytest cases per adapter and per check
-  decisions/            # DEC-TTEC-* architectural choices
+  streamlit_app.py        # live-demo page (reads reports/ttec_v0_1_demo.json)
+  requirements.txt        # streamlit + this package, for Streamlit Cloud
+  trace_to_eval_cli/
+    cli.py                # subcommands: show / validate / run / ingest / regress
+    adapters.py           # langgraph jsonl -> canonical trace
+    runner.py             # build_report, summarize_report, compare_reports
+    scoring.py            # status rollup
+  schemas/                # trace.schema.json, eval-case.schema.json, run-report.schema.json
+  examples/
+    eval-cases/           # ttec_smoke.yaml, ttec_demo.json
+    traces/canonical/     # canonical trace fixtures
+    traces/langgraph/     # raw langgraph jsonl sample
+  reports/                # committed json + md reports
+  tests/                  # pytest cases per command and per check
+  specs/                  # 0001-foundation, 0002-design
 ```
 
 ## Relationship to trace-to-eval-harness

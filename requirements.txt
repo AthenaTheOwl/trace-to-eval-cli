@@ -1,0 +1,5 @@
+# Streamlit Community Cloud reads this file. streamlit_app.py reads the committed
+# reports/ttec_v0_1_demo.json directly and imports the local package for the
+# shared summarize_report() ranking, so it needs streamlit plus this package.
+streamlit>=1.40
+.
