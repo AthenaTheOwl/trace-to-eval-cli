@@ -29,10 +29,8 @@ Bucket: agent-ops. Category: agent-ops. Brand prefix: `TTEC`.
 
 ## Status
 
-v0 scaffold. No implementation yet. The harness prototype lives in the
-sibling `trace-to-eval-harness` repo; this repo is the public CLI
-productization. The first PR after the scaffold lands the trace schema
-and the LangGraph adapter; see `docs/first-pr.md`.
+
+v0.1 shipped and runs end to end. The entry command `python -m trace_to_eval_cli validate` runs. See `specs/0002-design/` for the v0.1 scope and `STATUS.md` (where present) for the current state and next-feature queue.
 
 ## How to run
 
