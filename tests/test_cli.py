@@ -52,6 +52,8 @@ def test_summarize_report_ranks_failing_first() -> None:
     assert view["summary"]["failed"] == 1
     assert view["cases"][0]["status"] == "failed"
     assert view["cases"][0]["case_id"] == "TTEC-DEMO-003"
+    # 2 passed of 3 -> 66.7. Computing from failed instead of passed yields 33.3.
+    assert view["pass_rate_pct"] == 66.7
 
 
 def test_regress_fails_when_prior_pass_fails_now() -> None:
@@ -100,3 +102,59 @@ def test_regress_fails_when_prior_pass_fails_now() -> None:
         current.unlink(missing_ok=True)
     assert result.returncode == 1
     assert "TTEC_REGRESSION" in result.stderr
+
+
+def test_show_directory_report_fails_cleanly() -> None:
+    # A directory where a report file is expected must produce a clean error, not a
+    # raw traceback. The read fails with IsADirectoryError/PermissionError (OSError).
+    result = subprocess.run(
+        [sys.executable, "-m", "trace_to_eval_cli", "show", "--report", str(ROOT)],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 1
+    assert "TTEC_VALIDATION_FAILED" in result.stderr
+
+
+def test_ingest_directory_input_fails_cleanly() -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "trace_to_eval_cli",
+            "ingest",
+            "langgraph",
+            str(ROOT),
+            "--out",
+            str(ROOT / "reports" / "local" / "ingest-dir-test.json"),
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 1
+    assert "TTEC_VALIDATION_FAILED" in result.stderr
+
+
+def test_regress_directory_baseline_fails_cleanly() -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "trace_to_eval_cli",
+            "regress",
+            "--baseline",
+            str(ROOT),
+            "--current",
+            str(ROOT),
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 1
+    assert "TTEC_VALIDATION_FAILED" in result.stderr

@@ -11,9 +11,13 @@ class CliDataError(ValueError):
 
 def load_json(path: Path) -> Any:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except FileNotFoundError as exc:
-        raise CliDataError(f"file not found: {path}") from exc
+        text = path.read_text(encoding="utf-8")
+    # OSError covers a directory or unreadable path passed where a file is expected
+    # (IsADirectoryError on POSIX, PermissionError on Windows) as well as missing files.
+    except OSError as exc:
+        raise CliDataError(f"could not read file {path}: {exc}") from exc
+    try:
+        return json.loads(text)
     except json.JSONDecodeError as exc:
         raise CliDataError(f"invalid JSON in {path}: {exc.msg}") from exc
 
@@ -24,7 +28,10 @@ def dump_json(path: Path, data: Any) -> None:
 
 
 def load_case_file(path: Path) -> dict[str, Any]:
-    text = path.read_text(encoding="utf-8")
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        raise CliDataError(f"could not read file {path}: {exc}") from exc
     try:
         data = json.loads(text)
     except json.JSONDecodeError:
