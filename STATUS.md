@@ -2,6 +2,7 @@
 
 ## Current state
 
+- Archived 2026-07-01. The adapter layer this repo was building folds into trace-to-eval-harness, so work continues there instead of here.
 - v0.1 ships a local Python package with `python -m trace_to_eval_cli validate` as the first user action.
 - The default validation uses the checked-in smoke eval case, canonical trace, and report artifact.
 - The CLI can ingest a small LangGraph JSONL fixture, run deterministic checks, validate fixtures, and compare reports.
