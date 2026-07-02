@@ -9,9 +9,12 @@ from .io import CliDataError
 
 def load_canonical_trace(path: Path) -> dict[str, Any]:
     try:
-        trace = json.loads(path.read_text(encoding="utf-8"))
-    except FileNotFoundError as exc:
-        raise CliDataError(f"trace file not found: {path}") from exc
+        text = path.read_text(encoding="utf-8")
+    # OSError covers a directory or unreadable path where a trace file is expected.
+    except OSError as exc:
+        raise CliDataError(f"could not read file {path}: {exc}") from exc
+    try:
+        trace = json.loads(text)
     except json.JSONDecodeError as exc:
         raise CliDataError(f"invalid trace JSON in {path}: {exc.msg}") from exc
 
@@ -28,8 +31,9 @@ def ingest_langgraph_jsonl(path: Path) -> dict[str, Any]:
 
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
-    except FileNotFoundError as exc:
-        raise CliDataError(f"LangGraph trace file not found: {path}") from exc
+    # OSError covers a directory or unreadable path where a trace file is expected.
+    except OSError as exc:
+        raise CliDataError(f"could not read file {path}: {exc}") from exc
 
     for line_number, line in enumerate(lines, start=1):
         if not line.strip():
