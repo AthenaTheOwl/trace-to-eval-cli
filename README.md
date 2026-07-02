@@ -1,5 +1,7 @@
 # trace-to-eval-cli
 
+Status: archived 2026-07-01. Successor is trace-to-eval-harness, which folds in the adapter layer this repo was building.
+
 A guardrail case fails. The refusal that was required never came. Without a record, that failure is a story someone tells in a standup; with one, it is a test that runs in CI and stays failed until the refusal returns. This CLI does the conversion.
 
 ## What it does
