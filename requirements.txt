@@ -3,3 +3,7 @@
 # shared summarize_report() ranking, so it needs streamlit plus this package.
 streamlit>=1.40
 .
+
+# required by scripts/validate_data_conformance.py (DEC: data-conformance gate)
+jsonschema
+pyyaml
