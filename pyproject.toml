@@ -10,7 +10,10 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "AthenaTheOwl" }]
-dependencies = []
+dependencies = [
+    "pyyaml>=6.0",
+    "jsonschema>=4.0",
+]
 
 [project.scripts]
 trace-to-eval = "trace_to_eval_cli.cli:main"
