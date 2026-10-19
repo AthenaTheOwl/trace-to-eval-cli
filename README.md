@@ -92,7 +92,7 @@ This CLI is the floor the trace-shaped repos stand on — it sets the schema eve
 - [proof-gate-runner](https://github.com/AthenaTheOwl/proof-gate-runner) — runs the eval-runner here as one of its gates.
 - [trace-ledger-spec](https://github.com/AthenaTheOwl/trace-ledger-spec) — the standards-track schema work the adapters track against.
 
-[trace-to-eval-harness](https://github.com/AthenaTheOwl/trace-to-eval-harness) is the internal prototype that runs across the portfolio; this is its public CLI. Schemas and check semantics track between the two.
+[trace-to-eval-harness](https://github.com/AthenaTheOwl/trace-to-eval-harness) is the successor. Schemas and check semantics have diverged between the two; see the [migration map](docs/migration-to-harness.md).
 
 ## Layout
 
