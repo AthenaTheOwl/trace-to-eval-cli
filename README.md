@@ -1,6 +1,6 @@
 # trace-to-eval-cli
 
-Status: archived 2026-07-01. Successor is trace-to-eval-harness, which folds in the adapter layer this repo was building.
+Status: archived 2026-07-01. Successor is trace-to-eval-harness. It has no LangGraph adapter and no `regress` command; see the migration map.
 
 The [migration map](docs/migration-to-harness.md) covers check-name translations,
 trace-shape differences, the shared command-name collision, and the paired failing
