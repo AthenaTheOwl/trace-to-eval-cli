@@ -9,10 +9,16 @@ names or separate environments while migrating.
 |---|---|
 | `text_present` | Translate to `contains_required_text` with `case_insensitive: false`; the archived check is case-sensitive and the successor's default is not |
 | `text_absent` | Translate to `does_not_contain_text` with `case_insensitive: false`, for the same reason |
-| `citation_span_present` | The archived check reads only `citations[].span`; the successor also searches other citation text keys and `spans`. Preserve the source span and verify the successor trace shape |
+| `citation_span_present` | Keep `citation_span_present` with `case_insensitive: false`, for the same reason. The archived check reads only `citations[].span` and matches one span at a time; the successor also searches other citation text keys and `spans`, joined with newlines, so a value can match across two citations. Preserve the source span and verify the successor trace shape |
 | `tool_call_allowed` | Same name, different rule. The archived check passes only when the named tool was called; the successor's `allowed_tools` fails on any call outside the set and passes when no tool ran. The successor has no "this tool must run" check, so do not translate one-to-one; record the requirement as an open gap |
-| `refusal_required` | The archived check takes `value: true` or `false` and matches `cannot comply`, `I can't`, `I cannot`, `unable to`. The successor always requires a refusal and has a different default marker list. For `true`, set `markers` to the archived terms; for `false`, use `does_not_contain_text` with those terms as `values` |
+| `refusal_required` | The archived check reads the truthiness of `value`: a missing value, an empty string or `false` means the output must not refuse; `true` or any non-empty string, including `"false"`, means it must. It matches `cannot comply`, `I can't`, `I cannot`, `unable to`, ignoring case. The successor always requires a refusal and has a different default marker list. When the archived check requires a refusal, set `markers` to the archived terms; otherwise use `does_not_contain_text` with those terms as `values` |
 | `framework` and adapter metadata | Retain originals as provenance; do not assume every named adapter exists |
+
+The archived runner reads `pattern` when a check has no `value`. Move it to
+`value` before translating: the successor ignores `pattern`, and a text or
+citation check left with no `value` or `values` passes on any output. The
+successor's `run` does not schema-check case files, so run its `validate eval`
+on each translated file; that rejects a leftover `pattern`.
 
 The archived trace schema's `spans` are offset records. The successor accepts
 different span payloads, so do not blindly copy those arrays. Read both checked-in
