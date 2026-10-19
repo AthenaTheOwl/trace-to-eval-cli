@@ -28,5 +28,4 @@ command output together. Preserve missing evidence as missing.
 
 The successor's human-review boundary for generated cases remains in force.
 This document is a manual compatibility map, not an automatic converter or a
-new release of the archived CLI. It applies the version-and-evidence discipline
-in [AI Product Team's change workflow](https://github.com/3orionkings/ai-product-team/blob/main/workflows/process-change.md).
+new release of the archived CLI.
