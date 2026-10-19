@@ -3,7 +3,7 @@
 Status: archived 2026-07-01. Successor is trace-to-eval-harness, which folds in the adapter layer this repo was building.
 
 The [migration map](docs/migration-to-harness.md) covers check-name translations,
-span-shape differences, the shared command-name collision, and the paired failing
+trace-shape differences, the shared command-name collision, and the paired failing
 case/clean-control checks needed before moving a regression to the successor.
 
 A guardrail case fails. The refusal that was required never came. Without a record, that failure is a story someone tells in a standup; with one, it is a test that runs in CI and stays failed until the refusal returns. This CLI does the conversion.
