@@ -85,12 +85,9 @@ python -m trace_to_eval_cli regress \
 
 ## How it connects
 
-This CLI is the floor the trace-shaped repos stand on — it sets the schema everything else reads and writes.
+This CLI was meant to set the trace schema for the portfolio's trace-shaped repos; the harness now owns that role.
 
-- [dream-replay-cli](https://github.com/AthenaTheOwl/dream-replay-cli) — consumes the trace format and surfaces weekly dream candidates from it.
-- [agent-notary-layer](https://github.com/AthenaTheOwl/agent-notary-layer) — attaches receipts to the traces this CLI emits.
-- [proof-gate-runner](https://github.com/AthenaTheOwl/proof-gate-runner) — runs the eval-runner here as one of its gates.
-- [trace-ledger-spec](https://github.com/AthenaTheOwl/trace-ledger-spec) — the standards-track schema work the adapters track against.
+- [dream-replay-cli](https://github.com/AthenaTheOwl/dream-replay-cli) — its trace adapter reads the harness's JSONL format, not this CLI's trace format.
 
 [trace-to-eval-harness](https://github.com/AthenaTheOwl/trace-to-eval-harness) is the successor. Schemas and check semantics have diverged between the two; see the [migration map](docs/migration-to-harness.md).
 
