@@ -38,8 +38,9 @@ adapters; migration must not promote a schema label into a working integration.
 For each old failure, create one reviewed successor case and one clean control.
 Run both against fixed saved traces, compare the named failed checks, and explain
 any changed verdict. A clean control catches translations that fail every input.
-Keep the baseline report, translated case, normalized trace, schema versions and
-command output together. Preserve missing evidence as missing.
+Keep the baseline report, translated case, normalized trace, the schema files used
+(by commit hash or checksum; the two repos reuse the same `$id` for different
+schemas, and the archived ones carry no version) and command output together. Preserve missing evidence as missing.
 
 The successor's human-review boundary for generated cases remains in force.
 This document is a manual compatibility map, not an automatic converter or a
