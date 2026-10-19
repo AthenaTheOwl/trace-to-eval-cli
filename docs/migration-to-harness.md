@@ -1,14 +1,24 @@
 # Move new regression work to trace-to-eval-harness
 
 This repository remains archived. Keep old traces and reports as historical
-evidence and use `trace-to-eval-harness` for new regression work. Both projects
-install a command named `trace-to-eval`, so prefer their explicit Python module
-names or separate environments while migrating.
+evidence and use `trace-to-eval-harness` for new regression work. The successor
+installs the `trace-to-eval` command. This archived CLI installs
+`trace-to-eval-legacy` (it was also named `trace-to-eval` before 2026-10-19, so
+installing both replaced one script with the other). Both can now share one
+environment while migrating:
+
+```bash
+trace-to-eval-legacy ingest langgraph old.jsonl --out normalized.json  # archived CLI
+trace-to-eval validate eval translated_case.yaml                        # successor
+```
+
+The module forms `python -m trace_to_eval_cli` and `python -m trace_to_eval`
+work as well.
 
 Two archived commands have no successor counterpart. There is no `regress`: run
 the successor's `run --fail-on-failure` and compare reports by hand, as below.
 There is no LangGraph JSONL ingest: run the archived
-`python -m trace_to_eval_cli ingest langgraph` first, then normalize its output.
+`trace-to-eval-legacy ingest langgraph` first, then normalize its output.
 The successor's `ingest` shares the name but takes a trace JSON that is already in
 its shape and writes a draft YAML eval case, not a normalized trace.
 

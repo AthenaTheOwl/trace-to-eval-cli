@@ -22,7 +22,13 @@ from .runner import (
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="trace-to-eval")
+    parser = argparse.ArgumentParser(
+        prog="trace-to-eval-legacy",
+        description=(
+            "Archived 2026-07-01; superseded by trace-to-eval-harness, whose command is "
+            "`trace-to-eval`. Kept to read old traces and reports."
+        ),
+    )
     subcommands = parser.add_subparsers(dest="command")
 
     validate = subcommands.add_parser("validate", help="validate the default or provided scenario")

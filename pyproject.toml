@@ -15,8 +15,11 @@ dependencies = [
     "jsonschema>=4.0",
 ]
 
+# The successor, trace-to-eval-harness, owns the `trace-to-eval` command. This
+# archived CLI installs as `trace-to-eval-legacy` so the two can share an
+# environment without one replacing the other's script.
 [project.scripts]
-trace-to-eval = "trace_to_eval_cli.cli:main"
+trace-to-eval-legacy = "trace_to_eval_cli.cli:main"
 
 [dependency-groups]
 dev = [

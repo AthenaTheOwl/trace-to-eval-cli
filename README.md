@@ -56,8 +56,14 @@ Deploy on Streamlit Community Cloud: New app -> repo
 
 ## How to run
 
-The CLI is installed as `trace-to-eval` (or run the module with
+The CLI is installed as `trace-to-eval-legacy` (or run the module with
 `python -m trace_to_eval_cli`). All commands are offline and deterministic.
+
+Deprecated: this command was named `trace-to-eval` until 2026-10-19. The
+successor, trace-to-eval-harness, installs a command with that name, so
+installing both replaced one script with the other. The archived command was
+renamed; `trace-to-eval` now means the harness. Replace `trace-to-eval` with
+`trace-to-eval-legacy` in any script that calls this CLI.
 
 ```bash
 uv sync
