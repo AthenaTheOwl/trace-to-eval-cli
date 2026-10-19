@@ -20,10 +20,13 @@ citation check left with no `value` or `values` passes on any output. The
 successor's `run` does not schema-check case files, so run its `validate eval`
 on each translated file; that rejects a leftover `pattern`.
 
-Archived traces do not load in the successor as they stand. The archived
-`expected_behavior` is a string, and every checked-in archived trace has one; the
-successor requires an object and rejects the trace, so drop it or wrap it (for
-example as `{"description": ...}`) in the normalized copy. Archived `failure_tags`
+Archived traces that carry a non-empty `expected_behavior` do not load in the
+successor as they stand. The archived `expected_behavior` is a string, and every
+checked-in archived trace has one; the successor requires an object and rejects
+the trace, so drop it or wrap it (for example as `{"description": ...}`) in the
+normalized copy. Traces produced by the archived `ingest langgraph` all carry the
+same fixed placeholder string, which says nothing about that run, so drop it; wrap
+it only when a person wrote it for that trace. Archived `failure_tags`
 and case `suite` values are free-form, while the successor's schemas accept only
 fixed lists (`no_citation`, `guardrail` and `vendor-approval` are not on them), so
 map them. The archived offset `spans` load unchanged but supply no citation text.
