@@ -1,9 +1,9 @@
 # trace-to-eval-cli
 
-Status: archived 2026-07-01. Successor is trace-to-eval-harness, which folds in the adapter layer this repo was building.
+Status: archived 2026-07-01. Successor is trace-to-eval-harness. It has no LangGraph adapter and no `regress` command; see the migration map.
 
 The [migration map](docs/migration-to-harness.md) covers check-name translations,
-span-shape differences, the shared command-name collision, and the paired failing
+trace-shape differences, the shared command-name collision, and the paired failing
 case/clean-control checks needed before moving a regression to the successor.
 
 A guardrail case fails. The refusal that was required never came. Without a record, that failure is a story someone tells in a standup; with one, it is a test that runs in CI and stays failed until the refusal returns. This CLI does the conversion.
@@ -56,8 +56,14 @@ Deploy on Streamlit Community Cloud: New app -> repo
 
 ## How to run
 
-The CLI is installed as `trace-to-eval` (or run the module with
+The CLI is installed as `trace-to-eval-legacy` (or run the module with
 `python -m trace_to_eval_cli`). All commands are offline and deterministic.
+
+Deprecated: this command was named `trace-to-eval` until 2026-10-19. The
+successor, trace-to-eval-harness, installs a command with that name, so
+installing both replaced one script with the other. The archived command was
+renamed; `trace-to-eval` now means the harness. Replace `trace-to-eval` with
+`trace-to-eval-legacy` in any script that calls this CLI.
 
 ```bash
 uv sync
@@ -85,14 +91,11 @@ python -m trace_to_eval_cli regress \
 
 ## How it connects
 
-This CLI is the floor the trace-shaped repos stand on — it sets the schema everything else reads and writes.
+This CLI was meant to set the trace schema for the portfolio's trace-shaped repos; the harness now owns that role.
 
-- [dream-replay-cli](https://github.com/AthenaTheOwl/dream-replay-cli) — consumes the trace format and surfaces weekly dream candidates from it.
-- [agent-notary-layer](https://github.com/AthenaTheOwl/agent-notary-layer) — attaches receipts to the traces this CLI emits.
-- [proof-gate-runner](https://github.com/AthenaTheOwl/proof-gate-runner) — runs the eval-runner here as one of its gates.
-- [trace-ledger-spec](https://github.com/AthenaTheOwl/trace-ledger-spec) — the standards-track schema work the adapters track against.
+- [dream-replay-cli](https://github.com/AthenaTheOwl/dream-replay-cli) — its trace adapter reads the harness's JSONL format, not this CLI's trace format.
 
-[trace-to-eval-harness](https://github.com/AthenaTheOwl/trace-to-eval-harness) is the internal prototype that runs across the portfolio; this is its public CLI. Schemas and check semantics track between the two.
+[trace-to-eval-harness](https://github.com/AthenaTheOwl/trace-to-eval-harness) is the successor. Schemas and check semantics have diverged between the two; see the [migration map](docs/migration-to-harness.md).
 
 ## Layout
 

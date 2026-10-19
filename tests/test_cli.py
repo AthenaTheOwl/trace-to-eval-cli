@@ -158,3 +158,25 @@ def test_regress_directory_baseline_fails_cleanly() -> None:
     )
     assert result.returncode == 1
     assert "TTEC_VALIDATION_FAILED" in result.stderr
+
+
+def test_console_script_does_not_take_the_successor_command_name() -> None:
+    # trace-to-eval-harness installs `trace-to-eval`; sharing that name made
+    # whichever package was installed last replace the other's script.
+    import tomllib
+
+    pyproject = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    scripts = pyproject["project"]["scripts"]
+    assert scripts == {"trace-to-eval-legacy": "trace_to_eval_cli.cli:main"}
+    assert "trace-to-eval" not in scripts
+
+
+def test_help_names_the_legacy_command_and_the_successor(capsys) -> None:
+    from trace_to_eval_cli.cli import build_parser
+
+    parser = build_parser()
+    assert parser.prog == "trace-to-eval-legacy"
+    parser.print_help()
+    help_text = capsys.readouterr().out
+    assert help_text.startswith("usage: trace-to-eval-legacy ")
+    assert "superseded by trace-to-eval-harness" in help_text
